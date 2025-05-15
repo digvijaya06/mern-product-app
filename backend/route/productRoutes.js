@@ -8,18 +8,11 @@ router.get('/', async (req, res) => {
     const { category, name, page = 1, limit = 10, priceRange } = req.query;
     const pageNumber = parseInt(page);
     const pageSize = parseInt(limit);
-
     const query = {};
 
-    if (category) {
-      query.category = category;
-    }
+    if (category) query.category = category;
+    if (name) query.name = { $regex: name, $options: 'i' };
 
-    if (name) {
-      query.name = { $regex: name, $options: 'i' };
-    }
-
-    
     if (priceRange === 'under1k') {
       query.price = { $lt: 1000 };
     } else if (priceRange === '1kto2k') {
@@ -32,24 +25,26 @@ router.get('/', async (req, res) => {
       query.price = { $gte: 10000, $lte: 40000 };
     }
 
-    const totalCount = await Product.countDocuments(query);
+    const skip = (pageNumber - 1) * pageSize;
+ const totalCount = await Product.countDocuments(query);
 
-    let products;
+    let products = [];
+    
 
     if (category && pageNumber === 1) {
-
-      
       const allCategoryProducts = await Product.find(query);
       products = allCategoryProducts
         .sort(() => 0.5 - Math.random())
         .slice(0, pageSize);
+      
     } else {
-      // Regular paginated fetch
-      const skip = (pageNumber - 1) * pageSize;
       products = await Product.find(query)
         .skip(skip)
         .limit(pageSize);
+
+      
     }
+    
 
     res.json({ products, totalCount });
   } catch (error) {

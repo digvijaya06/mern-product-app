@@ -73,7 +73,7 @@ function App() {
         ) : (
           <>
             <h2 className="product-count">
-              Showing {totalCount} Products
+              Showing {products.length} Products
             </h2>
 
             <div className="filter-bar">
