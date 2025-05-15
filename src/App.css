@@ -1,0 +1,153 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 150%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #1f1c2c);
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+  width: 100%;
+  max-width: 1000px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+
+.center-wrapper {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.title {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  color: #00e5ff;
+}
+
+/* Search input */
+.search-input {
+  padding: 0.7rem 1rem;
+  width: 300px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #2d2d44;
+  color: #ffffff;
+  outline: none;
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
+  margin-bottom: 2rem;
+}
+
+.search-input::placeholder {
+  color: #aaa;
+}
+
+.error-text {
+  color: #ff4c4c;
+  margin-top: 1rem;
+}
+
+.product-count {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  color: #f0f0f0;
+}
+
+/* Table styling */
+.product-table {
+  width: 500%;
+  max-width: 800px;
+  border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  margin-bottom: 1rem;
+}
+
+.product-table th,
+.product-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #444;
+  text-align: left;
+}
+
+.product-table thead {
+  background-color: #333;
+}
+
+.product-table th {
+  color: #10e368;
+  font-size: 1.1rem;
+}
+
+.product-table tbody tr {
+  background-color: #2a2a3d;
+  transition: background-color 0.3s;
+}
+
+.product-table tbody tr:hover {
+  background-color: #383854;
+}
+
+.product-table td {
+  color: #eee;
+}
+.filter-bar {
+  display: flex;
+  gap: 1rem;
+  margin: 1rem 0;
+  justify-content: center;
+}
+
+.filter-dropdown {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: none;
+  background-color: #333;
+  color: #00e676;
+  font-size: 1rem;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 229, 255, 0.3);
+}
+.pagination-controls {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.pagination-controls button {
+  padding: 0.5rem 1rem;
+  background-color: #00e5ff;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+
+}
+
+.pagination-controls button:disabled {
+  background-color: gray;
+  cursor: not-allowed;
+  display: flex;
+  justify-content: center;
+  gap:10px;
+}
