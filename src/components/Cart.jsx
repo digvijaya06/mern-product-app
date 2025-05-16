@@ -1,14 +1,10 @@
 import { useCart } from '../context/CartContext';
 import './Cart.css';
-import { FaTrash} from '@fortawesome/free-solid-svg-icons';
-import { useNavigate } from 'react-router-dom';
-
-const navigate = useNavigate();
 
 const Cart = () => {
   const { cart, removeFromCart, isCartOpen, toggleCart } = useCart();
 
-  if (!isCartOpen) return null; 
+  if (!isCartOpen) return null; // Don’t render unless sidebar is open
 
   return (
     <div className="cart-container">
@@ -38,10 +34,10 @@ const Cart = () => {
                 <div className="cart-item-price">₹{item.price}</div>
               </div>
               <button
-                onClick={() => removeFromCart(item._id)} className='icon-btn'>
+                onClick={() => removeFromCart(item._id)}
                 style={{ padding: '4px 8px', background: '#ff5252', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
-              
-                <FaTrash/>
+              >
+                Remove
               </button>
             </div>
           ))}
