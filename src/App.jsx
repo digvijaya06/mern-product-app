@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
+import { useCart } from './context/CartContext';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
+import Cart from './components/Cart';
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -11,19 +15,19 @@ function App() {
   const [categoryFilter, setCategoryFilter] = useState('');
   const [priceRange, setPriceRange] = useState('');
   const [page, setPage] = useState(1);
-
   const productsPerPage = 10;
+
+  // 👇 Use context values instead of local showCart
+  const { cart, addToCart, isCartOpen, toggleCart } = useCart();
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         setError(false);
         let url = `/api/products?page=${page}&limit=${productsPerPage}`;
-
         if (categoryFilter) url += `&category=${categoryFilter}`;
         if (query) url += `&name=${query}`;
-        if (priceRange) url += `&priceRange=${priceRange}`; // Sending range string like "1kto2k"
-
+        if (priceRange) url += `&priceRange=${priceRange}`;
         const res = await axios.get(url);
         setProducts(res.data.products);
         setTotalCount(res.data.totalCount);
@@ -31,7 +35,6 @@ function App() {
         setError(true);
       }
     };
-
     fetchProducts();
   }, [page, categoryFilter, query, priceRange]);
 
@@ -43,19 +46,28 @@ function App() {
   };
 
   const paginationButtonStyle = (active) => ({
-    padding: '6px 12px',
+    padding: '5px 10px',
     border: 'none',
     borderRadius: '4px',
     cursor: 'pointer',
     fontWeight: 'bold',
-    backgroundColor: active ? '#333' : '#eee',
-    color: active ? '#fff' : '#000',
+    backgroundColor: active ? '#fff' : 'gray',
+    color: active ? 'black' : 'black',
   });
 
   const totalPages = Math.ceil(totalCount / productsPerPage);
 
   return (
     <div className="app-container">
+      {/* Floating Cart Icon with Context Toggle */}
+      <button className="floating-cart-btn" onClick={toggleCart}>
+        <FontAwesomeIcon icon={faCartShopping} />
+        <span className="cart-badge">{cart.length}</span>
+      </button>
+
+      {/* Only render Cart when isCartOpen from context is true */}
+      {isCartOpen && <Cart />}
+
       <div className="center-wrapper">
         <h1 className="title">Product Finder</h1>
 
@@ -72,9 +84,7 @@ function App() {
           <h2 className="error-text">Something went wrong!</h2>
         ) : (
           <>
-            <h2 className="product-count">
-              Showing {products.length} Products
-            </h2>
+            <h2 className="product-count">Showing {products.length} Products</h2>
 
             <div className="filter-bar">
               <select
@@ -117,6 +127,7 @@ function App() {
                   <th>Name</th>
                   <th>Category</th>
                   <th>Price (₹)</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -126,14 +137,18 @@ function App() {
                     <td>{p.name}</td>
                     <td>{p.category}</td>
                     <td>{p.price}</td>
+                    <td>
+                      <button className="icon-btn" onClick={() => addToCart(p)}>
+                        <FontAwesomeIcon icon={faCartShopping} />
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
 
-            {/* Simple numbered pagination */}
             {totalPages > 1 && (
-              <div style={{ marginTop: 20, display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: 6 }}>
+              <div className="pagination">
                 {Array.from({ length: totalPages }, (_, i) => (
                   <button
                     key={i + 1}
